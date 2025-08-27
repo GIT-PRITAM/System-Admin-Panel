@@ -1,9 +1,6 @@
 import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
-import Login from "./components/Login";
+import { Routes, Route } from "react-router-dom";
 import Dashboard from "./components/Dashboard";
-import PrivateRoute from "./routes/PrivateRoute";
-import { useAuth } from "./context/AuthContext";
 import SchemesPage from "./components/Scheme";
 import SchemeDetailPage from "./components/WorkOrder";
 import LocationPage from "./components/Geography";
