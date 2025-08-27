@@ -1,10 +1,10 @@
 const API_URL = import.meta.env.VITE_SERVER_URL;
 
-export async function adminLogin(phone: string, password: string) {
-    const res = await fetch(`${API_URL}/login/admin`, {
+export async function adminLogin(username: string, password: string) {
+    const res = await fetch(`${API_URL}/login/web`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone, password }),
+        body: JSON.stringify({ username, password }),
     });
 
     const json = await res.json();

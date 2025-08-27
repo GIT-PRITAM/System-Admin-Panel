@@ -5,8 +5,8 @@ import toast from 'react-hot-toast';
 export function useAdminLogin() {
     const { login } = useAuth();
 
-    const handleAdminLogin = async (phone: string, password: string) => {
-        const promise = adminLogin(phone, password).then((data) => {
+    const handleAdminLogin = async (username: string, password: string) => {
+        const promise = adminLogin(username, password).then((data) => {
             // if (data.user.role !== 'ADMIN') {
             //     throw new Error('You are not authorized to access this page');
             // }

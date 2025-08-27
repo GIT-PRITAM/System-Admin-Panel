@@ -2,8 +2,8 @@ import type { ReactNode } from "react";
 import { useAuth } from "./AuthContext";
 import LoginPage from "../components/Loginx";
 import Dashboard from "../components/Dashboard";
-import Sidebar from "../components/SideBar";
-import Sidebarp from "../components/SideBar2";
+// import Sidebar from "../components/SideBar";
+import Sidebar from "../components/SideBar2";
 
 export default function AuthGate({ children }: { children: ReactNode }) {
     const { user, loading, logout } = useAuth();
@@ -21,7 +21,7 @@ export default function AuthGate({ children }: { children: ReactNode }) {
     return (
         <div className="flex h-screen">
             {/* Sidebar */}
-            <Sidebarp />
+            <Sidebar />
 
             {/* Main content */}
             <main className="flex-1 transition-margin duration-300 ml-16 md:ml-64 bg-base-100 min-h-screen">

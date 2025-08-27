@@ -9,12 +9,12 @@ import {
     BuildingLibraryIcon,
     MapPinIcon,
     Squares2X2Icon,
-    Cog6ToothIcon, // Icon for Admin Panel heading
+    // Icon for Admin Panel heading
+    ShieldCheckIcon
 } from "@heroicons/react/24/outline";
 import { useState, FC } from "react";
 
-const Sidebarp: FC = () => {
-    const [isUsersOpen, setIsUsersOpen] = useState<boolean>(false);
+const Sidebar: FC = () => {
     const [isReportOpen, setIsReportOpen] = useState<boolean>(false);
 
     const baseItem =
@@ -28,10 +28,13 @@ const Sidebarp: FC = () => {
         <aside className="fixed top-0 left-0 h-full bg-[#2563EB] text-white flex flex-col w-64 transition-all duration-300 font-inter">
 
             {/* Admin Panel Heading */}
-            <div className="flex items-center gap-3 px-4 py-4 border-b">
-                <Cog6ToothIcon className="h-7 w-7 text-white" />
+            <div className="flex items-center gap-2 px-4 pt-4 pb-1">
+                <ShieldCheckIcon className="h-7 w-7 text-white" />
                 <span className="text-xl font-semibold">Admin Panel</span>
             </div>
+
+            <div className="border-t border-white opacity-50 w-56 mx-auto my-2"></div>
+
 
             <nav className="p-4 space-y-1">
 
@@ -105,4 +108,4 @@ const Sidebarp: FC = () => {
     );
 };
 
-export default Sidebarp;
+export default Sidebar;

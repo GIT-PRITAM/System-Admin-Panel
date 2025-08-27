@@ -3,6 +3,8 @@ import EmojiPicker from 'emoji-picker-react';
 import type { EmojiClickData } from 'emoji-picker-react';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
+import { PlusIcon } from '@heroicons/react/24/solid';
+import AddAssetModal from './AddAssetModal';
 
 
 const API_URL = import.meta.env.VITE_SERVER_URL;
@@ -27,14 +29,19 @@ interface AssetItem {
 const Assets: React.FC<AssetsProps> = () => {
     const { token } = useAuth();
     const [showPicker, setShowPicker] = useState(false);
-    const [selectedEmoji, setSelectedEmoji] = useState<string>("");
+    const [selectedEmoji, setSelectedEmoji] = useState<string>("😊");
     const [loading, setLoading] = useState(true);
     const [newCategoryName, setNewCategoryName] = useState<string>("");
     const [listData, setListData] = useState<{ id: number; label: string; icon: string }[]>([]);
     const [selectedItem, setSelectedItem] = useState<ListData | null>(null); // store clicked item
     const [questionList, setQuestionList] = useState<{ id: number; text: string; activity_type: string }[]>([]);
     const [newListData, setNewListData] = useState('');
-    const [newQuestionList, setNewQuestionList] = useState('');
+    const [newQuestionList, setNewQuestionList] = useState<{ question: string; activity_type: string }>({
+        question: '',
+        activity_type: ''
+    });
+    const [modalOpen, setModalOpen] = useState(false);
+
 
     // Column 3 data
     const [assetsList, setAssetsList] = useState<AssetItem[]>([]);
@@ -48,7 +55,7 @@ const Assets: React.FC<AssetsProps> = () => {
     };
 
 
-
+    // category list fetch
     const fetchListData = async () => {
         try {
             setLoading(true);
@@ -71,6 +78,7 @@ const Assets: React.FC<AssetsProps> = () => {
         }
     };
 
+    //question list fetch
     const fetchQuestionList = async (id: number) => {
         try {
             const res = await fetch(`${API_URL}/category/${id}/questions`, {
@@ -92,6 +100,77 @@ const Assets: React.FC<AssetsProps> = () => {
         }
     };
 
+    //add category list
+    const handleAddCategories = async () => {
+
+        const promise = fetch(`${API_URL}/categories`, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+
+            body: JSON.stringify({ icon: selectedEmoji, label: newCategoryName }),
+        }).then(async (res) => {
+            const data = await res.json();
+            if (!res.ok) {
+                throw new Error(data.message);
+            }
+
+            setNewListData('');
+            setListData((prev) => [...prev, data.data]);
+            return data.message;
+        });
+
+        toast.promise(promise, {
+            loading: 'Adding List...',
+            success: (msg) => msg || 'List added successfully!',
+            error: (err) => err.message || 'Failed to add List',
+        });
+    };
+
+
+    //add question list
+    const handleAddQuestions = async () => {
+
+        if (!selectedItem) {
+            toast.error('No category selected');
+            return;
+        }
+        const promise = fetch(`${API_URL}/category/${selectedItem.id}/questions`, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+
+            body: JSON.stringify({ text: newQuestionList.question, type: newQuestionList.activity_type }),
+        }).then(async (res) => {
+            const data = await res.json();
+            if (!res.ok) {
+                throw new Error(data.message);
+            }
+
+            setQuestionList((prev) => [...prev, data.data]);
+            return data.message;
+        });
+
+        toast.promise(promise, {
+            loading: 'Adding Question...',
+            success: (msg) => msg || 'Question added successfully!',
+            error: (err) => err.message || 'Failed to add Question',
+        });
+    };
+
+
+    //emoji selection
+    const handleListClick = (item: ListData) => {
+        setSelectedItem(item);
+
+        // Load mock data for the extra list
+        fetchQuestionList(item.id);
+
+    };
 
 
 
@@ -118,44 +197,8 @@ const Assets: React.FC<AssetsProps> = () => {
 
     }, []);
 
-    const handleAddCategories = async () => {
-
-        const promise = fetch(`${API_URL}/categories`, {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-
-            body: JSON.stringify({ icon: selectedEmoji, label: newCategoryName }),
-        }).then(async (res) => {
-            const data = await res.json();
-            if (!res.ok) {
-                throw new Error(data.message);
-            }
-
-            setNewListData('');
-            setListData((prev) => [...prev, data.data]);
-            return data.message;
-        });
-
-        toast.promise(promise, {
-            loading: 'Adding scheme...',
-            success: (msg) => msg || 'Scheme added successfully!',
-            error: (err) => err.message || 'Failed to add scheme',
-        });
-    };
 
 
-
-
-    const handleListClick = (item: ListData) => {
-        setSelectedItem(item);
-
-        // Load mock data for the extra list
-        fetchQuestionList(item.id);
-
-    };
 
     // Pagination
     const indexOfLastItem = currentPage * itemsPerPage;
@@ -242,19 +285,42 @@ const Assets: React.FC<AssetsProps> = () => {
                         {/* Form */}
                         <div className="card bg-base-100 shadow-xl w-full">
                             <div className="card-body">
-                                <h2 className="card-title text-primary">Add New Question</h2>
-                                <input
-                                    type="text"
-                                    placeholder="Enter your question"
-                                    className="input input-bordered w-full mb-4 focus:outline-none"
-                                />
+                                <div className='flex justify-between'>
+
+                                    <h2 className="card-title text-primary">Add New Question</h2>
+                                    <h2 className='card-title text-base-content'>{selectedItem.label}</h2>
+                                </div>
+                                <div className='relative w-full mb-4'>
+                                    <input
+                                        type="text"
+                                        value={newQuestionList.question}
+                                        onChange={e => { setNewQuestionList(prev => ({ ...prev, question: e.target.value })) }}
+                                        placeholder="Type your question"
+                                        className="input input-bordered w-full mb-4 focus:outline-none pr-10"
+                                    />
+                                    {questionList && (
+                                        <button
+                                            type="button"
+                                            onClick={() => setNewQuestionList({ question: '', activity_type: '' })}
+                                            className="absolute right-3 top-1/3 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                        >
+                                            <span className="bg-gray-200 rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                                                ✕
+                                            </span>
+                                        </button>
+                                    )}
+                                </div>
                                 <div className="flex gap-2">
-                                    <select className="select select-bordered flex-1 focus:outline-none">
-                                        <option value="">Select option</option>
-                                        <option value="option1">Option 1</option>
-                                        <option value="option2">Option 2</option>
+                                    <select className="select select-bordered flex-1 focus:outline-none"
+                                        value={newQuestionList.activity_type}
+                                        onChange={e => { setNewQuestionList(prev => ({ ...prev, activity_type: e.target.value })) }}
+                                    >
+                                        <option value="SURVEY">SURVEY</option>
+                                        <option value="INSPECTION">INSPECTION</option>
+                                        <option value="VERIFICATION">VERIFICATION</option>
+
                                     </select>
-                                    <button className="btn btn-primary w-28">Add</button>
+                                    <button className="btn btn-primary w-28" onClick={handleAddQuestions}>Add</button>
                                 </div>
                             </div>
                         </div>
@@ -280,15 +346,22 @@ const Assets: React.FC<AssetsProps> = () => {
             {/* Column 3 - equal width */}
             <div className="w-2/5 p-4">
                 <div className="bg-base-200 rounded-box shadow-md p-4">
-                    <h3 className="text-lg font-semibold mb-3 ml-2">Assets</h3>
+                    <div className='flex justify-between mb-3'>
+                        <h3 className="text-lg font-semibold ml-2">Assets</h3>
+                        <button
+                            className="btn btn-primary rounded flex items-center gap-2"
+                            onClick={() => setModalOpen(true)}
+                        >
+                            <PlusIcon className="size-6" />
+                            Add
+                        </button>
+                    </div>
+
                     <ul className="list bg-base-100 rounded-box">
                         {currentAssets.map((asset) => (
                             <li key={asset.id} className="list-row">
                                 <a className="flex items-start gap-2">
-                                    {/* Emoji */}
                                     <span className="text-2xl">{asset.emoji}</span>
-
-                                    {/* Title + Subtitle */}
                                     <div>
                                         <div className="font-semibold">{asset.title}</div>
                                         <div className="text-sm opacity-60">{asset.subtitle}</div>
@@ -298,8 +371,6 @@ const Assets: React.FC<AssetsProps> = () => {
                         ))}
                     </ul>
 
-
-                    {/* Pagination Controls */}
                     <div className="flex justify-between items-center mt-4">
                         <button className="btn btn-accent" onClick={prevPage} disabled={currentPage === 1}>
                             Prev
@@ -310,7 +381,18 @@ const Assets: React.FC<AssetsProps> = () => {
                         </button>
                     </div>
                 </div>
+
+                {/* Modal */}
+                {modalOpen && (
+                    <AddAssetModal
+                        isOpen={modalOpen}
+                        onClose={() => setModalOpen(false)}
+                    />
+                )}
             </div>
+
+
+
         </div>
     );
 };

@@ -34,7 +34,7 @@ export default function LoginPage() {
                     {/* Username */}
                     <div className="form-control">
                         <label htmlFor="username" className="label">
-                            <span className="label-text font-semibold text-gray-700">Phone</span>
+                            <span className="label-text font-semibold text-primary mb-0.5">Username</span>
                         </label>
                         <input
                             type="text"
@@ -42,7 +42,7 @@ export default function LoginPage() {
                             name="username"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
-                            placeholder="Enter your phone"
+                            placeholder="Enter username"
                             className="input input-bordered w-full py-3 text-base focus:outline-none"
                             required
                             autoComplete="username"
@@ -52,7 +52,7 @@ export default function LoginPage() {
                     {/* Password */}
                     <div className="form-control">
                         <label htmlFor="password" className="label">
-                            <span className="label-text font-semibold text-gray-700">Password</span>
+                            <span className="label-text font-semibold text-primary mb-0.5">Password</span>
                         </label>
                         <input
                             type="password"
@@ -60,7 +60,7 @@ export default function LoginPage() {
                             name="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            placeholder="********"
+                            placeholder="Enter password"
                             className="input input-bordered w-full py-3 text-base focus:outline-none"
                             required
                             autoComplete="current-password"
