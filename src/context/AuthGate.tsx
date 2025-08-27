@@ -1,8 +1,6 @@
 import type { ReactNode } from "react";
 import { useAuth } from "./AuthContext";
 import LoginPage from "../components/Loginx";
-import Dashboard from "../components/Dashboard";
-// import Sidebar from "../components/SideBar";
 import Sidebar from "../components/SideBar2";
 
 export default function AuthGate({ children }: { children: ReactNode }) {
