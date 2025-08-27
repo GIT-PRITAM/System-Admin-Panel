@@ -54,7 +54,7 @@ const Users: React.FC = () => {
     return (
         <>
             <div className="flex items-center justify-between p-4">
-                <div className="flex items-center justify-center">
+                <div className="flex items-center text-primary justify-center">
                     <UsersIcon className="size-6 mr-4" />
                     <span className="text-2xl font-bold">Users</span>
                 </div>

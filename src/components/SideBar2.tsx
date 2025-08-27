@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import {
     DocumentTextIcon,
     CubeIcon,
-    UserGroupIcon,
+    UsersIcon,
     ChartBarIcon,
     ChevronDownIcon,
     ClipboardDocumentIcon,
@@ -12,9 +12,9 @@ import {
     // Icon for Admin Panel heading
     ShieldCheckIcon
 } from "@heroicons/react/24/outline";
-import { useState, FC } from "react";
+import { useState } from "react";
 
-const Sidebar: FC = () => {
+const Sidebar = () => {
     const [isReportOpen, setIsReportOpen] = useState<boolean>(false);
 
     const baseItem =
@@ -64,7 +64,7 @@ const Sidebar: FC = () => {
 
                 {/* Users */}
                 <Link to="/users" className={mainItem}>
-                    <UserGroupIcon className="h-6 w-6" />
+                    <UsersIcon className="h-6 w-6" />
                     <span>Users</span>
                 </Link>
 

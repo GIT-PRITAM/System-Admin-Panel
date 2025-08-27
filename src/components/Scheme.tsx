@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { PlusIcon } from '@heroicons/react/16/solid';
-import { DocumentIcon } from '@heroicons/react/24/solid';
+import { DocumentTextIcon } from '@heroicons/react/24/solid';
 import { useAuth } from '../context/AuthContext';
 
 const API_URL = import.meta.env.VITE_SERVER_URL;
@@ -12,7 +12,7 @@ const API_URL = import.meta.env.VITE_SERVER_URL;
 type Scheme = {
     id: string;
     scheme_name: string;
-    work_orders: { id: string }[];
+    orders: { id: string }[];
 };
 
 export default function SchemesPage() {
@@ -79,8 +79,8 @@ export default function SchemesPage() {
     return (
         <>
             <div className="flex items-center justify-between p-4">
-                <div className="flex items-center justify-center">
-                    <DocumentIcon className="size-6 mr-4" />
+                <div className="flex items-center text-primary justify-center">
+                    <DocumentTextIcon className="size-6 mr-4" />
                     <span className="text-2xl font-bold">Schemes</span>
                 </div>
                 <div className="flex items-center gap-3">

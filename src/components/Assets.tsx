@@ -4,7 +4,6 @@ import type { EmojiClickData } from 'emoji-picker-react';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import { PlusIcon } from '@heroicons/react/24/solid';
-import AddAssetModal from './AddAssetModal';
 
 
 const API_URL = import.meta.env.VITE_SERVER_URL;
@@ -30,17 +29,17 @@ const Assets: React.FC<AssetsProps> = () => {
     const { token } = useAuth();
     const [showPicker, setShowPicker] = useState(false);
     const [selectedEmoji, setSelectedEmoji] = useState<string>("😊");
-    const [loading, setLoading] = useState(true);
+    // const [loading, setLoading] = useState(true);
     const [newCategoryName, setNewCategoryName] = useState<string>("");
     const [listData, setListData] = useState<{ id: number; label: string; icon: string }[]>([]);
     const [selectedItem, setSelectedItem] = useState<ListData | null>(null); // store clicked item
     const [questionList, setQuestionList] = useState<{ id: number; text: string; activity_type: string }[]>([]);
-    const [newListData, setNewListData] = useState('');
+    // const [newListData, setNewListData] = useState('');
     const [newQuestionList, setNewQuestionList] = useState<{ question: string; activity_type: string }>({
         question: '',
         activity_type: ''
     });
-    const [modalOpen, setModalOpen] = useState(false);
+    // const [modalOpen, setModalOpen] = useState(false);
 
 
     // Column 3 data
@@ -58,7 +57,7 @@ const Assets: React.FC<AssetsProps> = () => {
     // category list fetch
     const fetchListData = async () => {
         try {
-            setLoading(true);
+
             const res = await fetch(`${API_URL}/categories`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -74,7 +73,7 @@ const Assets: React.FC<AssetsProps> = () => {
         } catch (err) {
             toast.error('Failed to fetch categories');
         } finally {
-            setLoading(false);
+
         }
     };
 
@@ -96,7 +95,7 @@ const Assets: React.FC<AssetsProps> = () => {
         } catch (err) {
             toast.error('Failed to fetch questions');
         } finally {
-            setLoading(false);
+
         }
     };
 
@@ -117,7 +116,7 @@ const Assets: React.FC<AssetsProps> = () => {
                 throw new Error(data.message);
             }
 
-            setNewListData('');
+
             setListData((prev) => [...prev, data.data]);
             return data.message;
         });
@@ -350,7 +349,7 @@ const Assets: React.FC<AssetsProps> = () => {
                         <h3 className="text-lg font-semibold ml-2">Assets</h3>
                         <button
                             className="btn btn-primary rounded flex items-center gap-2"
-                            onClick={() => setModalOpen(true)}
+                            onClick={() => { }}
                         >
                             <PlusIcon className="size-6" />
                             Add
@@ -383,12 +382,12 @@ const Assets: React.FC<AssetsProps> = () => {
                 </div>
 
                 {/* Modal */}
-                {modalOpen && (
+                {/* {modalOpen && (
                     <AddAssetModal
                         isOpen={modalOpen}
                         onClose={() => setModalOpen(false)}
                     />
-                )}
+                )} */}
             </div>
 
 

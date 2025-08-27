@@ -1,8 +1,5 @@
 import React from "react";
 import {
-    PlusIcon,
-    PlayIcon,
-    StopIcon,
     ClipboardDocumentIcon,
     CubeIcon,
     DocumentCheckIcon,
@@ -16,8 +13,8 @@ import {
     CategoryScale,
     LinearScale,
     BarElement,
-    ChartOptions,
-    ChartData,
+    type ChartOptions,
+    type ChartData,
 } from "chart.js";
 import { Doughnut, Bar } from "react-chartjs-2";
 
